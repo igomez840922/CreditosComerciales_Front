@@ -1911,7 +1911,6 @@ export default class Services extends ApiServiceCore {
                 //Armamos la data a mostrar en pantalla
                 result.ConsultarAPCResponse.ConsultarAPCResult.DetCompromisoAPC.DetCompromisoAPC.map(function (item, i) {
                     try {
-                        console.log("DetCompromisoAPC",item)
                         if (item.dc_nom_asoc.toUpperCase().indexOf('BANESCO') < 0 && item.dc_descr_corta_rela.toUpperCase().indexOf('SERVICIOS') < 0) {
                             console.log("ServicioAPC", item.dc_nom_asoc)
                             var deudas = { paymentHistory: item.dc_historia, debtype: "short", facilityType: item.dc_descr_corta_rela, bank: item.dc_nom_asoc, balance: Number(currencyData.getRealValue(item.dc_saldo_actual)), approvedAmount: Number(currencyData.getRealValue(item.dc_monto_original)), variation: 0, startDate: item.dc_fec_inicio_rel, endDate: item.dc_fec_fin_rel,codeT24:item?.dc_codigo??"",dateT24:item?.dc_fec_actualizacion??"" }
@@ -1926,7 +1925,7 @@ export default class Services extends ApiServiceCore {
                             deudas.endDate = moment(deudas.endDate).format("YYYY-MM-DD")
                             deudas.startDate = moment(deudas.startDate).format("YYYY-MM-DD")
                             deudas.codeT24 = item.dc_codigo
-                            deudas.dateT24 = moment(item.dc_fec_actualizacion).format("YYYY-MM-DD") 
+                            deudas.dateT24 =moment(item.dc_fec_actualizacion).format("YYYY-MM-DD")
                         }
                     }
                     catch (err) { }
@@ -1950,7 +1949,7 @@ export default class Services extends ApiServiceCore {
                         deudas.endDate = moment(deudas.endDate).format("YYYY-MM-DD")
                         deudas.startDate = moment(deudas.startDate).format("YYYY-MM-DD")
                         deudas.codeT24 = item.dc_codigo
-                        deudas.dateT24 = moment(item.dc_fec_actualizacion).format("YYYY-MM-DD") 
+                        deudas.dateT24 =moment(item.dc_fec_actualizacion).format("YYYY-MM-DD")
                     }
                 }
                 catch (err) { }
@@ -1971,6 +1970,8 @@ export default class Services extends ApiServiceCore {
 
                 result.Party.PartyInfo.CreditLine.forEach((item) => {
                     try {
+                        
+                        console.log("PartyInfo",item);
                         /*
                         {
                     "AvailableAmt": {
@@ -2011,6 +2012,8 @@ export default class Services extends ApiServiceCore {
 
                             deudas.endDate = moment(deudas.endDate).format("YYYY-MM-DD")
                             deudas.startDate = moment(deudas.startDate).format("YYYY-MM-DD")
+                            deudas.codeT24 = item.CreditLineId
+                            deudas.dateT24 =moment().format("YYYY-MM-DD")
                         }
                     }
                     catch (err) { }
@@ -2035,6 +2038,8 @@ export default class Services extends ApiServiceCore {
 
                         deudas.endDate = moment(deudas.endDate).format("YYYY-MM-DD")
                         deudas.startDate = moment(deudas.startDate).format("YYYY-MM-DD")
+                        deudas.codeT24 = item.CreditLineId
+                        deudas.dateT24 =moment().format("YYYY-MM-DD")
                     }
                 }
                 catch (err) { }
@@ -2063,6 +2068,8 @@ export default class Services extends ApiServiceCore {
                         dataResult.shortTermresult.push(deudas)
                         deudas.endDate = moment(deudas.endDate).format("YYYY-MM-DD")
                         deudas.startDate = moment(item.approvedDate).format("YYYY-MM-DD")
+                        deudas.codeT24 = ""
+                        deudas.dateT24 =moment().format("YYYY-MM-DD")
                     }
                     catch (err) { }
                 })
@@ -2079,6 +2086,8 @@ export default class Services extends ApiServiceCore {
                     dataResult.shortTermresult.push(deudas)
                     deudas.endDate = moment(deudas.endDate).format("YYYY-MM-DD")
                     deudas.startDate = moment(item.approvedDate).format("YYYY-MM-DD")
+                    deudas.codeT24 = ""
+                    deudas.dateT24 =moment().format("YYYY-MM-DD")
                 }
                 catch (err) { }
             }
@@ -2152,6 +2161,8 @@ export default class Services extends ApiServiceCore {
 
                             deudas.endDate = moment(deudas.endDate).format("YYYY-MM-DD")
                             deudas.startDate = moment(deudas.startDate).format("YYYY-MM-DD")
+                            deudas.codeT24 = item.AcctKey.AcctId
+                            deudas.dateT24 =moment().format("YYYY-MM-DD")
                         }
                         catch (err) { }
                     }
@@ -2176,6 +2187,8 @@ export default class Services extends ApiServiceCore {
 
                         deudas.endDate = moment(deudas.endDate).format("YYYY-MM-DD")
                         deudas.startDate = moment(deudas.startDate).format("YYYY-MM-DD")
+                        deudas.codeT24 = item.AcctKey.AcctId
+                        deudas.dateT24 =moment().format("YYYY-MM-DD")
                     }
                     catch (err) { }
                 }
@@ -2269,7 +2282,7 @@ export default class Services extends ApiServiceCore {
                                 "approvedDate": item.CardInfo.EndDt !== undefined ? item.CardInfo.EndDt : moment().format("YYYY-MM-DD"),
                                 "actualBalance": balanceAmt?.CurAmt ?? 0,
                                 "debtorName": item.CardInfo.EmbossInfo.FirstName + " " + item.CardInfo.EmbossInfo.LastName,
-                                "AcctId": "",
+                                "AcctId": ""
                             });
                         }
 
