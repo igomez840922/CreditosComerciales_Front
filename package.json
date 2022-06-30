@@ -1,6 +1,6 @@
 {
   "name": "banesco-creditoscomerciales",
-  "version": "1.0.207",
+  "version": "1.0.210",
   "private": true,
   "dependencies": {
     "@fullcalendar/bootstrap": "^5.5.0",

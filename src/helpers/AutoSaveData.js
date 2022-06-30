@@ -204,10 +204,6 @@ export default class AutoSaveData {
       dataResultLP = await backendServices.consultBankRelationsDebtsLP(transactionId);
       dataResultLP = dataResultLP.bankingRelationLPDTOList;
       
-      console.log("fase0", dataResult);
-      console.log("fase001", dataResultLP);
-      console.log("fase002", dataResultCore);
-
       //backendServices.eliminateFisicalBankingRelationshipsDebtsCP(transactionId)
       //backendServices.eliminateFisicalBankingRelationshipsDebtsLP(transactionId)
 
