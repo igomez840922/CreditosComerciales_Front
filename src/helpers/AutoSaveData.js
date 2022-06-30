@@ -169,34 +169,40 @@ export default class AutoSaveData {
       dataResultLP = dataResultLP.bankingRelationLPDTOList;
       var dataResultCore = await coreServices.getAllTermDebtsByTransaction(transactionId);
 
+      //Elimina duplicados en CP
       var group = functionshelper.groupBy(dataResult,"t24");
      for (let i = 0; i < group.length; i++) {
       if(group[i][0].t24 === true && group[i].length > 1){
          var groupCode = functionshelper.groupBy(group[i],"codigot24");
-         console.log("fase0group",groupCode);
          for (let x = 0; x < groupCode.length; x++) {
             if(groupCode[x].length > 1){
               for (let p = 1; p < groupCode[x].length; p++) {
-                await backendServices.eliminateBankingRelationshipsDebtsCP({ transactId: transactionId, debtId: group[i][p].debtId })
-              }
+                await backendServices.eliminateBankingRelationshipsDebtsCP({ transactId: transactionId, debtId: groupCode[x][p].debtId })
+             }
             }
           }          
         }
       }
 
+      //Elimina duplicados en LP
       group = functionshelper.groupBy(dataResultLP,"t24");
       for (let i = 0; i < group.length; i++) {
         if(group[i][0].t24 === true && group[i].length > 1){
-          var groupCode = functionshelper.groupBy(group[i],"codigot24");
-          for (let x = 0; x < groupCode.length; x++) {
-            if(groupCode[x].length > 1){
-              for (let p = 1; p < groupCode[x].length; p++) {
-                await backendServices.eliminateFisicalBankingRelationshipsDebtsLP({ transactId: transactionId, debtId: group[i][p].debtId })
+           var groupCode = functionshelper.groupBy(group[i],"codigot24");
+           for (let x = 0; x < groupCode.length; x++) {
+              if(groupCode[x].length > 1){
+                for (let p = 1; p < groupCode[x].length; p++) {
+                  await backendServices.eliminateBankingRelationshipsDebtsLP({ transactId: transactionId, debtId: groupCode[x][p].debtId })
+                }
               }
-            }
-          }          
+            }          
+          }
         }
-      }
+
+      dataResult = await backendServices.consultBankingRelationsDebtsCP(transactionId);
+      dataResult = dataResult.getBankingRelationCPDTOList;
+      dataResultLP = await backendServices.consultBankRelationsDebtsLP(transactionId);
+      dataResultLP = dataResultLP.bankingRelationLPDTOList;
       
       console.log("fase0", dataResult);
       console.log("fase001", dataResultLP);
@@ -207,7 +213,7 @@ export default class AutoSaveData {
 
       for (var short of dataResultCore.shortTermresult) {
         let record = dataResult == undefined || dataResult == null || dataResult.length == 0 ? undefined : dataResult.find(x => x.codigot24 == short?.codeT24 ?? "");
-        /*
+        
         if (record !== undefined && record != null) {
           if (short?.dateT24 ?? "" > record.fechat24) {
             
@@ -264,7 +270,7 @@ export default class AutoSaveData {
 
             })
           }
-        } else {*/
+        } else {
           
           // si no existe un record en dataResult.getBankingRelationCPDTOList... siempre agregamos
           let dataSet = {
@@ -291,11 +297,11 @@ export default class AutoSaveData {
           await backendServices.newBankingRelationsDebtsCP(dataSet).then(resp => {
 
           })
-        //}
+        }
       }
       for (var long of dataResultCore.longTermresult) {
         let record = dataResultLP == undefined || dataResultLP == null || dataResultLP.length == 0 ? undefined : dataResultLP.find(x => x.codigot24 == long?.codeT24 ?? "");
-        /*
+        
         if (record !== undefined && record != null) {
           if (long?.dateT24 ?? "" > record.fechat24) {
             //Verificar si existe un record en dataResult.getBankingRelationCPDTOList con el mismo codeT24 .... si la fecha es mayor, actualizar amount, dateT24
@@ -321,7 +327,6 @@ export default class AutoSaveData {
               "debtId": record?.debtId,
             }
             await backendServices.updateBankRelationsDebtsLP(dataSet).then(resp => {
-
             })
           } else {
             //si no tiene fecha actualizar todo
@@ -347,11 +352,9 @@ export default class AutoSaveData {
               "debtId": record?.debtId,
             }
             await backendServices.updateBankRelationsDebtsLP(dataSet).then(resp => {
-
             })
-
           }
-        } else {*/
+        } else {
           // si no existe un record en dataResult.getBankingRelationCPDTOList... siempre agregamos
           let dataSet = {
             "facilityType": long.facilityType,
@@ -374,9 +377,8 @@ export default class AutoSaveData {
             "fechat24": (moment(long?.dateT24, "DD/MM/YYYY").format("YYYY-MM-DD") == "Invalid date" ? moment().format("YYYY-MM-DD") : (moment(long?.dateT24, "DD/MM/YYYY").format("YYYY-MM-DD"))),//ACTUALIZA
           }
           await backendServices.newBankingRelationsDebtsLP(dataSet).then(resp => {
-
           })
-        //}
+        }
       }
     }
     catch (err) { console.error("newBankingRelationsDebts", err) }
