@@ -168,18 +168,20 @@ export default class AutoSaveData {
       dataResultLP = dataResultLP.bankingRelationLPDTOList;
       var dataResultCore = await coreServices.getAllTermDebtsByTransaction(transactionId);
 
+
       console.log("fase0", dataResult);
       console.log("fase001", dataResultLP);
       console.log("fase002", dataResultCore);
+
+      //backendServices.eliminateFisicalBankingRelationshipsDebtsCP(transactionId)
+      //backendServices.eliminateFisicalBankingRelationshipsDebtsLP(transactionId)
+
       for (var short of dataResultCore.shortTermresult) {
         let record = dataResult == undefined || dataResult == null || dataResult.length == 0 ? undefined : dataResult.find(x => x.codigot24 == short?.codeT24 ?? "");
-        console.log("fase1", short);
-        console.log("fase1", record);
-
+        
         if (record !== undefined && record != null) {
           if (short?.dateT24 ?? "" > record.fechat24) {
-            console.log("fase2", short);
-
+            
             //Verificar si existe un record en dataResult.getBankingRelationCPDTOList con el mismo codeT24 .... si la fecha es mayor, actualizar amount, dateT24
             let dataSet = {
               "facilityType": record.facilityType,
@@ -205,9 +207,8 @@ export default class AutoSaveData {
             await backendServices.updateBankRelationsDebtsCP(dataSet).then(resp => {
 
             })
-          } else if (short?.dateT24 == "" || short?.dateT24 == null) {
-            console.log("fase3", short);
-
+          } else {
+            
             //si no tiene fecha actualizar todo
             let dataSet = {
               "facilityType": short?.facilityType ?? " ",
@@ -235,8 +236,7 @@ export default class AutoSaveData {
             })
           }
         } else {
-          console.log("fase5", short);
-
+          
           // si no existe un record en dataResult.getBankingRelationCPDTOList... siempre agregamos
           let dataSet = {
             "facilityType": short.facilityType,//NUEVO
@@ -293,7 +293,7 @@ export default class AutoSaveData {
             await backendServices.updateBankRelationsDebtsLP(dataSet).then(resp => {
 
             })
-          } else if (long?.dateT24 == "" || long?.dateT24 == null) {
+          } else {
             //si no tiene fecha actualizar todo
             let dataSet = {
               "facilityType": long?.facilityType ?? " ",

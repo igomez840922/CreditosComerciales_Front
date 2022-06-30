@@ -3123,6 +3123,18 @@ transactId: 3106
     return undefined;
   }
 
+  async eliminateFisicalBankingRelationshipsDebtsCP(transactId) {
+    try {
+      var data = {transactId:transactId}/*transactId:101 */
+      var result = await this.del(url.URL_BACKEND_IGR_DEUDASBANCARIACP + "?" + qs.stringify(data));
+      return result;//WatchlistModel.fromJson(result);
+    }
+    catch (err) {
+      console.error("api eliminateFisicalBankingRelationshipsDebtsCP: ", err)
+    }
+    return undefined;
+  }
+
   ////IGR - RELACIONES BANCARAS - DEUDAS LP ///////
   /**
    * 
@@ -3276,6 +3288,17 @@ transactId: 3106
     }
     catch (err) {
       console.error("api eliminateBankingRelationshipsDebtsLP: ", err)
+    }
+    return undefined;
+  }
+  async eliminateFisicalBankingRelationshipsDebtsLP(transactId) {
+    try {
+      var data = {transactId:transactId}/*transactId:101 */
+      var result = await this.del(url.URL_BACKEND_IGR_DEUDASBANCARIALP + "?" + qs.stringify(data));
+      return result;//WatchlistModel.fromJson(result);
+    }
+    catch (err) {
+      console.error("api eliminateFisicalBankingRelationshipsDebtsLP: ", err)
     }
     return undefined;
   }

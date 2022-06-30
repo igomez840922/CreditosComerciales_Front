@@ -2060,7 +2060,7 @@ export default class Services extends ApiServiceCore {
                                         "debtorName": item.CardInfo.EmbossInfo.FirstName + " " + item.CardInfo.EmbossInfo.LastName,
                                         "AcctId": "",
                                     } */
-                result.forEach((item) => {
+                result.forEach((item,idx) => {
                     try {
                         var deudas = { paymentHistory: "", debtype: "short", facilityType: item.facilityType, bank: "Banesco", balance: Number(currencyData.getRealValue(item.actualBalance)), approvedAmount: Number(currencyData.getRealValue(item.approvedAmount)), variation: Number(currencyData.getRealValue(0)), startDate: moment().format("YYYY-MM-DD"), endDate: moment().format("YYYY-MM-DD") }
                         //deudas.variation=deudas.approvedAmount - deudas.balance;
@@ -2068,7 +2068,7 @@ export default class Services extends ApiServiceCore {
                         dataResult.shortTermresult.push(deudas)
                         deudas.endDate = moment(deudas.endDate).format("YYYY-MM-DD")
                         deudas.startDate = moment(item.approvedDate).format("YYYY-MM-DD")
-                        deudas.codeT24 = ""
+                        deudas.codeT24 = idx
                         deudas.dateT24 =moment().format("YYYY-MM-DD")
                     }
                     catch (err) { }
@@ -2086,7 +2086,7 @@ export default class Services extends ApiServiceCore {
                     dataResult.shortTermresult.push(deudas)
                     deudas.endDate = moment(deudas.endDate).format("YYYY-MM-DD")
                     deudas.startDate = moment(item.approvedDate).format("YYYY-MM-DD")
-                    deudas.codeT24 = ""
+                    deudas.codeT24 = 1
                     deudas.dateT24 =moment().format("YYYY-MM-DD")
                 }
                 catch (err) { }
