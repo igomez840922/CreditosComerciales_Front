@@ -90,7 +90,7 @@ const Historical = () => {
     { text: <strong>{t("Customer ID")}</strong>, dataField: 'nroClientT24', sort: true },
     // { text: <strong>{t("Proposed amount")}</strong>, dataField: 'val3', sort: true },
     { text: <strong>{t("Type Bank")}</strong>, dataField: 'bank', sort: true },
-    // { text: <strong>{t("Economic Activity")}</strong>, dataField: 'val5', sort: true },
+    { text: <strong>{t("Economic Activity")}</strong>, dataField: 'economicActivity', sort: true },
     { text: <strong>Covenants</strong>, dataField: 'covenantEnvironmental', sort: true },
     { text: <strong>{t("Compliance Date")} Covenants</strong>, dataField: 'complianceDate', sort: true },
     { text: <strong>{t("CreditAutonomy")}</strong>, dataField: 'autonomyCredit', sort: true },
@@ -191,8 +191,8 @@ const Historical = () => {
 
     if (fechas) {
       [startDate, endDate] = fechas;
-      startDate = moment(startDate, "DD/MM/YYYY").format("YYYY-MM-DD");
-      endDate = moment(endDate, "DD/MM/YYYY").format("YYYY-MM-DD");
+      startDate = startDate && moment(startDate, "DD/MM/YYYY").format("YYYY-MM-DD");
+      endDate = endDate && moment(endDate, "DD/MM/YYYY").format("YYYY-MM-DD");
     }
 
     let dataHistorical = {
@@ -218,6 +218,7 @@ const Historical = () => {
             $$.names = `${$$.name} ${$$.secondName}`;
             $$.surnames = `${$$.lastName} ${$$.secondLastName}`;
             $$.closingCompliance = false;
+            $$.complianceDate = $$.complianceDate ? moment($$.AvFormcomplianceDate).format("DD/MM/YYYY") : null;
 
             $$.covenantEnvironmental = $$.covenantEnvironmental ? 'Si' : 'No';
             $$.decAutonomyCredit = $$.decAutonomyCredit ? 'Si' : 'No';
@@ -403,12 +404,12 @@ const Historical = () => {
                                 } else {
                                   setClientDocIdER('')
                                   setApprovalAutonomy(false)
-                                  setfechas('')
-                                  setIsActiveLoading(true)
-                                  setTimeout(() => {
-                                    setIsActiveLoading(false)
-                                  }, 1);
+                                  // setfechas('')
                                 }
+                                setIsActiveLoading(true)
+                                setTimeout(() => {
+                                  setIsActiveLoading(false)
+                                }, 1);
                                 setOnlyEnvironmentRisk(!onlyEnvironmentRisk);
                                 setclosingSelect('');
                                 setApplyCovenantSelect('');
@@ -459,7 +460,7 @@ const Historical = () => {
                                 <Flatpickr
                                   name="date"
                                   id="date"
-                                  disabled={!onlyEnvironmentRisk}
+                                  // disabled={!onlyEnvironmentRisk}
                                   className="form-control d-block"
                                   placeholder={OPTs.FORMAT_DATE_SHOW}
                                   options={{
@@ -496,7 +497,7 @@ const Historical = () => {
                             </AvGroup>
                             <AvGroup className="col-12 col-md-3">
                               <Label htmlFor="client">{t("ID Number")}</Label>
-                              <AvField
+                              {!isActiveLoading && <AvField
                                 className="form-control"
                                 name="clientDocIdG"
                                 id="clientDocIdG"
@@ -509,17 +510,18 @@ const Historical = () => {
                                 validate={{
                                   required: { value: !onlyEnvironmentRisk && idTypeValidate, errorMessage: t("Required Field") },
                                 }}
-                              />
+                              />}
                             </AvGroup>
                           </Row>
                           <Row>
                             <AvGroup className="col-12 col-md-3">
                               <Label htmlFor="client">{t("Customer ID")}</Label>
-                              <AvField
+                              {!isActiveLoading && <AvField
                                 className="form-control"
                                 name="clientDocIdER"
                                 id="clientDocIdER"
                                 type="text"
+                                disabled={!onlyEnvironmentRisk}
                                 value={clientDocIdER}
                                 onKeyPress={(event) => {
                                   setClientDocIdER(event.target.value)
@@ -527,7 +529,7 @@ const Historical = () => {
                                 validate={{
                                   required: { value: onlyEnvironmentRisk && idTypeValidate, errorMessage: t("Required Field") },
                                 }}
-                              />
+                              />}
                             </AvGroup>
                             <AvGroup className="col-12 col-md-3">
                               <Label htmlFor="client">{t("Apply")} Covenants ({t("AmbientalRisk")})</Label>
@@ -566,7 +568,7 @@ const Historical = () => {
                         <div className="table-responsive">
                           <BootstrapTable
                             bootstrap4
-                            keyField='creationDate'
+                            keyField='transactId'
                             bordered={false}
                             striped
                             hover

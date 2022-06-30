@@ -3197,6 +3197,12 @@ transactId: 3106
   if(data["t24"]===undefined){
     data["t24"] = false;
   }
+  if(data["codigot24"]===undefined){
+    data["codigot24"] = "";
+  }
+  if(data["codigot24"]===undefined){
+    data["codigot24"] = "";
+  }
       console.log("newBankingRelationsDebtsLP", data)
 
       var result = await this.post(url.URL_BACKEND_IGR_DEUDASBANCARIALP, data);
@@ -3240,6 +3246,12 @@ transactId: 3106
       */
   if(data["t24"]===undefined){
     data["t24"] = false;
+  }
+  if(data["codigot24"]===undefined){
+    data["codigot24"] = "";
+  }
+  if(data["codigot24"]===undefined){
+    data["codigot24"] = "";
   }
       var result = await this.put(url.URL_BACKEND_IGR_DEUDASBANCARIALP, data);
       return result;//WatchlistModel.fromJson(result);

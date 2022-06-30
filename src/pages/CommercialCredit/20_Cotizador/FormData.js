@@ -79,6 +79,7 @@ export const FormData = (props) => {
     disableDefinedFee,
     disableTerm,
     disableGracePeriod,
+    enableAbono: enabledAbono,
     optionsIdTypes,
     optionsCountries,
     optionsBanks,
@@ -414,6 +415,7 @@ export const FormData = (props) => {
                     options={optionsConfirmation}
                     defaultValue={optionsConfirmation[1]}
                     value={form.name}
+                    isDisabled={enabledAbono}
                     onChange={hdlOnChange}
                   />
                 </div>
@@ -494,6 +496,7 @@ export const FormData = (props) => {
                     options={optionsConfirmation}
                     defaultValue={optionsConfirmation[1]}
                     value={form.name}
+                    isDisabled={enabledAbono}
                     onChange={hdlOnChange}
                   />
                 </div>

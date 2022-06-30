@@ -221,10 +221,11 @@ const CreditProposalPage = (props) => {
   }
   async function loadDataGeneral(params) {
 
-
+    setViewAutonomy(false)
 
     await backendServices.consultGeneralDataPropCred(params?.transactionId ?? 0)
-      .then((data) => {
+      .then(async (data) => {
+        setViewAutonomy(true)
         if (data !== undefined) {
           var datosgenerales = data.length == 0 ? undefined : data[0]?.requestId;
           if (datosgenerales === undefined || datosgenerales == null) {
@@ -237,9 +238,12 @@ const CreditProposalPage = (props) => {
           setdataGlobal(dataGlobal)
           setDatosGenerales(data[0]);
           autoSaveData.saveInitialData(params?.transactionId ?? 0);
+
         }
         else {
         }
+      }).catch(err => {
+        console.log(err)
       });
   }
   async function newDataGeneral(params) {
@@ -634,7 +638,7 @@ const CreditProposalPage = (props) => {
         infoBpmModel.activityId = OPTs.ACT_NONE;
 
         let autonomy = new LevelAutonomyClass();
-        autonomy = await autonomy.getLevelAutonomy()??{};
+        autonomy = await autonomy.getLevelAutonomy() ?? {};
         if (infoBpmModel.toprocess !== undefined) {
           infoBpmModel.processId = infoBpmModel.toprocess;
           infoBpmModel.activityId = OPTs.ACT_NONE;
@@ -651,8 +655,8 @@ const CreditProposalPage = (props) => {
             "status": "activo", //el paralelo de Ambiental esta activo
             "id": locationData.instanceId,
             "rol": infoBpmModel.toprocess === OPTs.PROCESS_ASIGNARNUMFIDEICOMISO ? "fideicomiso" : "legal",
-            "credito": autonomy?.credit??"",
-            "banca": autonomy?.banca??""
+            "credito": autonomy?.credit ?? "",
+            "banca": autonomy?.banca ?? ""
           };
         }
         else {
@@ -674,8 +678,8 @@ const CreditProposalPage = (props) => {
               "dambientalparalelo": "conparalelo", //con riesgo ambiental
               "monto": 10000, //monto total de suma de facilidades
               "id": locationData.instanceId,
-              "credito": autonomy?.credit??"",
-              "banca": autonomy?.banca??""
+              "credito": autonomy?.credit ?? "",
+              "banca": autonomy?.banca ?? ""
             };
           }
           else {
@@ -692,8 +696,8 @@ const CreditProposalPage = (props) => {
               "status": "completo", //el paralelo de Ambiental esta completo
               "monto": 10000, //monto total de suma de facilidades
               "id": locationData.instanceId,
-              "credito": autonomy?.credit??"",
-              "banca": autonomy?.banca??""
+              "credito": autonomy?.credit ?? "",
+              "banca": autonomy?.banca ?? ""
             };
           }
         }
@@ -713,7 +717,7 @@ const CreditProposalPage = (props) => {
 
         break;
       }
-      
+
       default:
         break;
     }

@@ -1660,7 +1660,7 @@ export default class Services extends ApiServiceCore {
                             try {
                                 /*
                                 {
-                        "Category": "01",
+                        "Category": "01", 
                         "Desc": "340000071156",
                         "ProductDesc": "Prestamo Comercia",
                         "AcctOpeningInfo": {
@@ -1914,7 +1914,7 @@ export default class Services extends ApiServiceCore {
                         console.log("DetCompromisoAPC",item)
                         if (item.dc_nom_asoc.toUpperCase().indexOf('BANESCO') < 0 && item.dc_descr_corta_rela.toUpperCase().indexOf('SERVICIOS') < 0) {
                             console.log("ServicioAPC", item.dc_nom_asoc)
-                            var deudas = { paymentHistory: item.dc_historia, debtype: "short", facilityType: item.dc_descr_corta_rela, bank: item.dc_nom_asoc, balance: Number(currencyData.getRealValue(item.dc_saldo_actual)), approvedAmount: Number(currencyData.getRealValue(item.dc_monto_original)), variation: 0, startDate: item.dc_fec_inicio_rel, endDate: item.dc_fec_fin_rel }
+                            var deudas = { paymentHistory: item.dc_historia, debtype: "short", facilityType: item.dc_descr_corta_rela, bank: item.dc_nom_asoc, balance: Number(currencyData.getRealValue(item.dc_saldo_actual)), approvedAmount: Number(currencyData.getRealValue(item.dc_monto_original)), variation: 0, startDate: item.dc_fec_inicio_rel, endDate: item.dc_fec_fin_rel,codeT24:item?.dc_codigo??"",dateT24:item?.dc_fec_actualizacion??"" }
                             deudas.variation = deudas.approvedAmount - deudas.balance;
                             if (moment(deudas.endDate).diff(deudas.startDate, 'years') > 1 && item.dc_descr_corta_rela.toUpperCase().indexOf('TARJ') < 0) {
                                 deudas.debtype = "long";
@@ -1938,7 +1938,7 @@ export default class Services extends ApiServiceCore {
                 var item = result.ConsultarAPCResponse.ConsultarAPCResult.DetCompromisoAPC.DetCompromisoAPC;
                 try {
                     if (item.dc_nom_asoc.toUpperCase().indexOf('BANESCO') < 0 && item.dc_descr_corta_rela.toUpperCase().indexOf('SERVICIOS') < 0) {
-                        var deudas = { paymentHistory: item.dc_historia, debtype: "short", facilityType: item.dc_descr_corta_rela, bank: item.dc_nom_asoc, balance: Number(currencyData.getRealValue(item.dc_saldo_actual)), approvedAmount: Number(currencyData.getRealValue(item.dc_monto_original)), variation: 0, startDate: item.dc_fec_inicio_rel, endDate: item.dc_fec_fin_rel }
+                        var deudas = { paymentHistory: item.dc_historia, debtype: "short", facilityType: item.dc_descr_corta_rela, bank: item.dc_nom_asoc, balance: Number(currencyData.getRealValue(item.dc_saldo_actual)), approvedAmount: Number(currencyData.getRealValue(item.dc_monto_original)), variation: 0, startDate: item.dc_fec_inicio_rel, endDate: item.dc_fec_fin_rel,codeT24:item?.dc_codigo??"",dateT24:item?.dc_fec_actualizacion??"" }
                         deudas.variation = deudas.approvedAmount - deudas.balance;
                         if (moment(deudas.endDate).diff(deudas.startDate, 'years') > 1 && item.dc_descr_corta_rela.toUpperCase().indexOf('TARJ') < 0) {
                             deudas.debtype = "long";
@@ -3109,7 +3109,7 @@ export default class Services extends ApiServiceCore {
                     try {
                         dataResult.push({
                             "year": moment(item.dc_fec_inicio_rel).format("YYYY"), "month": moment(item.dc_fec_inicio_rel).format("MMMM"),
-                            "initialAmount": item.dc_monto_original, "actualAmount": item.dc_saldo_actual, "asociation": item.dc_nom_asoc, "source": item.dc_descr_corta_rela
+                            "initialAmount": item.dc_monto_original, "actualAmount": item.dc_saldo_actual, "asociation": item.dc_nom_asoc, "source": item.dc_descr_corta_rela,codeT24:item?.dc_codigo??"",dateT24:item?.dc_fec_actualizacion??""
                         });
                     }
                     catch (err) { }
@@ -3120,7 +3120,7 @@ export default class Services extends ApiServiceCore {
                 try {
                     dataResult.push({
                         "year": moment(item.dc_fec_inicio_rel).format("YYYY"), "month": moment(item.dc_fec_inicio_rel).format("MMMM"),
-                        "initialAmount": item.dc_monto_original, "actualAmount": item.dc_saldo_actual, "asociation": item.dc_nom_asoc, "source": item.dc_descr_corta_rela
+                        "initialAmount": item.dc_monto_original, "actualAmount": item.dc_saldo_actual, "asociation": item.dc_nom_asoc, "source": item.dc_descr_corta_rela,codeT24:item?.dc_codigo??"",dateT24:item?.dc_fec_actualizacion??""
                     });
                 }
                 catch (err) { }

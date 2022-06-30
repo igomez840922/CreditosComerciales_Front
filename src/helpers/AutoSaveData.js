@@ -1,5 +1,6 @@
 
 import { BackendServices, CoreServices } from "../services";
+import moment from "moment";
 
 const backendServices = new BackendServices();
 const coreServices = new CoreServices();
@@ -161,193 +162,192 @@ export default class AutoSaveData {
 
       var checkCP = false;
       var checkLP = false;
-
       var dataResult = await backendServices.consultBankingRelationsDebtsCP(transactionId);
-      if (dataResult !== undefined && dataResult !== null && dataResult.getBankingRelationCPDTOList.length > 0) { }
-      else {
-        checkCP = true;
-      }
+      dataResult = dataResult.getBankingRelationCPDTOList;
       var dataResultLP = await backendServices.consultBankRelationsDebtsLP(transactionId);
-      if (dataResultLP !== undefined && dataResultLP !== null && dataResultLP.bankingRelationLPDTOList.length > 0) { }
-      else {
-        checkLP = true;
-      }
-
-      if (!checkCP && !checkLP) {
-        return;
-      }
-
+      dataResultLP = dataResultLP.bankingRelationLPDTOList;
       var dataResultCore = await coreServices.getAllTermDebtsByTransaction(transactionId);
 
-      if (checkCP) {
-        for (var short of dataResultCore.shortTermresult) {
-          console.log("shortTermresult", short);
-          if (dataResult !== undefined && dataResult !== null && dataResult.getBankingRelationCPDTOList.length > 0) {
-            dataResult = dataResult.getBankingRelationCPDTOList;
-            let record = dataResult.find(x => x.codeT24 == short?.codeT24 ?? "");
-            if (record !== undefined && record != null) {
-              if (short?.dateT24 ?? "" > record.dateT24) {
-                //Verificar si existe un record en dataResult.getBankingRelationCPDTOList con el mismo codeT24 .... si la fecha es mayor, actualizar amount, dateT24
-                let dataSet = {
-                  "facilityType": record.facilityType,
-                  "amount": Number(short.approvedAmount.toFixed(2)),//ACTUALIZA
-                  "date": record.startDate,
-                  "expirationDate": record.endDate,
-                  "debitBalance1": Number(record.balance.toFixed(2)),
-                  "debitBalance2": record.debitBalance2,
-                  "debitBalance3": record.debitBalance3,
-                  "paymentHistory": record.paymentHistory,
-                  "rate": record.rate,
-                  "fee": record.fee,
-                  "bail": record.bail,
-                  "fundDestiny": record.fundDestiny,
-                  status: true,
-                  t24: true,
-                  "bank": record.bank,
-                  "transactId": Number(transactionId),
-                  "codeT24": record?.codeT24 ?? "",
-                  "dateT24": short?.dateT24 ?? "",//ACTUALIZA
-                  "debtId": record?.debtId,
-                }
-                await backendServices.updateBankRelationsDebtsCP(dataSet)
-              } else if (short?.dateT24 == "" || short?.dateT24 == null) {
-                //si no tiene fecha actualizar todo
-                let dataSet = {
-                  "facilityType": short.facilityType,
-                  "amount": Number(short.approvedAmount.toFixed(2)),//ACTUALIZA
-                  "date": short.startDate,//ACTUALIZA
-                  "expirationDate": short.endDate,//ACTUALIZA
-                  "debitBalance1": Number(short.balance.toFixed(2)),//ACTUALIZA
-                  "debitBalance2": record.debitBalance2,
-                  "debitBalance3": record.debitBalance3,
-                  "paymentHistory": short.paymentHistory,//ACTUALIZA
-                  "rate": record.rate,
-                  "fee": record.fee,
-                  "bail": record.bail,
-                  "fundDestiny": record.fundDestiny,
-                  status: true,
-                  t24: true,
-                  "bank": short.bank,//ACTUALIZA
-                  "transactId": Number(transactionId),
-                  "codeT24": short?.codeT24 ?? "",//ACTUALIZA
-                  "dateT24": short?.dateT24 ?? "",//ACTUALIZA
-                  "debtId": record?.debtId,
-                }
-                await backendServices.updateBankRelationsDebtsCP(dataSet)
-              }
-            } else {
-              // si no existe un record en dataResult.getBankingRelationCPDTOList... siempre agregamos
-              let dataSet = {
-                "facilityType": short.facilityType,//NUEVO
-                "amount": Number(short.approvedAmount.toFixed(2)),//NUEVO
-                "date": short.startDate,//NUEVO
-                "expirationDate": short.endDate,//NUEVO
-                "debitBalance1": Number(short.balance.toFixed(2)),//NUEVO
-                "debitBalance2": 0,//NUEVO
-                "debitBalance3": 0,//NUEVO
-                "paymentHistory": short.paymentHistory,//NUEVO
-                "rate": 0,//NUEVO
-                "fee": 0,//NUEVO
-                "bail": 0,//NUEVO
-                "fundDestiny": "",//NUEVO
-                status: true,//NUEVO
-                t24: true,//NUEVO
-                "bank": short.bank,//NUEVO
-                "transactId": Number(transactionId),//NUEVO
-                "codeT24": short?.codeT24 ?? "",//NUEVO
-                "dateT24": short?.dateT24 ?? "",//NUEVO
-              }
-              await backendServices.newBankingRelationsDebtsCP(dataSet)
+      console.log("fase0", dataResult);
+      console.log("fase001", dataResultLP);
+      console.log("fase002", dataResultCore);
+      for (var short of dataResultCore.shortTermresult) {
+        let record = dataResult == undefined || dataResult == null || dataResult.length == 0 ? undefined : dataResult.find(x => x.codigot24 == short?.codeT24 ?? "");
+        console.log("fase1", short);
+        console.log("fase1", record);
+
+        if (record !== undefined && record != null) {
+          if (short?.dateT24 ?? "" > record.fechat24) {
+            console.log("fase2", short);
+
+            //Verificar si existe un record en dataResult.getBankingRelationCPDTOList con el mismo codeT24 .... si la fecha es mayor, actualizar amount, dateT24
+            let dataSet = {
+              "facilityType": record.facilityType,
+              "amount": Number(short?.approvedAmount ?? 0),//ACTUALIZA
+              "date": record?.startDate ?? "",
+              "expirationDate": record?.endDate ?? "",
+              "debitBalance1": Number(record?.balance ?? 0),
+              "debitBalance2": record.debitBalance2,
+              "debitBalance3": record.debitBalance3,
+              "paymentHistory": record.paymentHistory,
+              "rate": record.rate,
+              "fee": record.fee,
+              "bail": record.bail,
+              "fundDestiny": record.fundDestiny,
+              status: true,
+              t24: true,
+              "bank": record.bank,
+              "transactId": Number(transactionId),
+              "codigot24": short?.codeT24 ?? "",
+              "fechat24": (moment(short?.dateT24, "DD/MM/YYYY").format("YYYY-MM-DD") == "Invalid date" ? moment().format("YYYY-MM-DD") : (moment(short?.dateT24, "DD/MM/YYYY").format("YYYY-MM-DD"))),//ACTUALIZA
+              "debtId": record?.debtId,
             }
+            await backendServices.updateBankRelationsDebtsCP(dataSet).then(resp => {
+
+            })
+          } else if (short?.dateT24 == "" || short?.dateT24 == null) {
+            console.log("fase3", short);
+
+            //si no tiene fecha actualizar todo
+            let dataSet = {
+              "facilityType": short?.facilityType ?? " ",
+              "amount": Number(short?.approvedAmount ?? 0),//ACTUALIZA
+              "date": record?.startDate ?? "",
+              "expirationDate": record?.endDate ?? "",
+              "debitBalance1": Number(short?.balance ?? 0),//ACTUALIZA
+              "debitBalance2": record.debitBalance2,
+              "debitBalance3": record.debitBalance3,
+              "paymentHistory": short?.paymentHistory ?? " ",//ACTUALIZA
+              "rate": record.rate,
+              "fee": record.fee,
+              "bail": record.bail,
+              "fundDestiny": record.fundDestiny,
+              status: true,
+              t24: true,
+              "bank": short?.bank ?? " ",//ACTUALIZA
+              "transactId": Number(transactionId),
+              "codigot24": short?.codeT24 ?? "",//ACTUALIZA
+              "fechat24": (moment(short?.dateT24, "DD/MM/YYYY").format("YYYY-MM-DD") == "Invalid date" ? moment().format("YYYY-MM-DD") : (moment(short?.dateT24, "DD/MM/YYYY").format("YYYY-MM-DD"))),//ACTUALIZA
+              "debtId": record?.debtId,
+            }
+            await backendServices.updateBankRelationsDebtsCP(dataSet).then(resp => {
+
+            })
+          }
+        } else {
+          console.log("fase5", short);
+
+          // si no existe un record en dataResult.getBankingRelationCPDTOList... siempre agregamos
+          let dataSet = {
+            "facilityType": short.facilityType,//NUEVO
+            "amount": Number(short?.approvedAmount ?? 0),//NUEVO
+            "date": record?.startDate ?? "",
+            "expirationDate": record?.endDate ?? "",
+            "debitBalance1": Number(short?.balance ?? 0),//NUEVO
+            "debitBalance2": 0,//NUEVO
+            "debitBalance3": 0,//NUEVO
+            "paymentHistory": short?.paymentHistory ?? " ",//NUEVO
+            "rate": 0,//NUEVO
+            "fee": 0,//NUEVO
+            "bail": 0,//NUEVO
+            "fundDestiny": "",//NUEVO
+            status: true,//NUEVO
+            t24: true,//NUEVO
+            "bank": short?.bank ?? " ",//NUEVO
+            "transactId": Number(transactionId),//NUEVO
+            "codigot24": short?.codeT24 ?? "",//NUEVO
+            "fechat24": (moment(short?.dateT24, "DD/MM/YYYY").format("YYYY-MM-DD") == "Invalid date" ? moment().format("YYYY-MM-DD") : (moment(short?.dateT24, "DD/MM/YYYY").format("YYYY-MM-DD"))),//ACTUALIZA
 
           }
+          await backendServices.newBankingRelationsDebtsCP(dataSet).then(resp => {
+
+          })
         }
       }
-
-      if (checkLP) {
-        for (var long of dataResultCore.longTermresult) {
-          if (dataResultLP !== undefined && dataResultLP !== null && dataResultLP.bankingRelationLPDTOList.length > 0) {
-            dataResultLP = dataResultLP.bankingRelationLPDTOList;
-            let record = dataResult.find(x => x.codeT24 == long?.codeT24 ?? "");
-            if (record !== undefined && record != null) {
-              if (long?.dateT24 ?? "" > record.dateT24) {
-                //Verificar si existe un record en dataResult.getBankingRelationCPDTOList con el mismo codeT24 .... si la fecha es mayor, actualizar amount, dateT24
-                let dataSet = {
-                  "facilityType": record.facilityType,
-                  "amount": Number(short.approvedAmount.toFixed(2)),//ACTUALIZA
-                  "date": record.startDate,
-                  "expirationDate": record.endDate,
-                  "debitBalance1": Number(record.balance.toFixed(2)),
-                  "debitBalance2": record.debitBalance2,
-                  "debitBalance3": record.debitBalance3,
-                  "paymentHistory": record.paymentHistory,
-                  "rate": record.rate,
-                  "fee": record.fee,
-                  "bail": record.bail,
-                  "fundDestiny": record.fundDestiny,
-                  status: true,
-                  t24: true,
-                  "bank": record.bank,
-                  "transactId": Number(transactionId),
-                  "codeT24": short?.codeT24 ?? "",//ACTUALIZA
-                  "dateT24": short?.dateT24 ?? "",//ACTUALIZA
-                  "debtId": record?.debtId,
-                }
-                await backendServices.updateBankRelationsDebtsLP(dataSet)
-              } else if (long?.dateT24 == "" || long?.dateT24 == null) {
-                //si no tiene fecha actualizar todo
-                let dataSet = {
-                  "facilityType": short.facilityType,
-                  "amount": Number(short.approvedAmount.toFixed(2)),//ACTUALIZA
-                  "date": short.startDate,//ACTUALIZA
-                  "expirationDate": short.endDate,//ACTUALIZA
-                  "debitBalance1": Number(short.balance.toFixed(2)),//ACTUALIZA
-                  "debitBalance2": record.debitBalance2,
-                  "debitBalance3": record.debitBalance3,
-                  "paymentHistory": short.paymentHistory,//ACTUALIZA
-                  "rate": record.rate,
-                  "fee": record.fee,
-                  "bail": record.bail,
-                  "fundDestiny": record.fundDestiny,
-                  status: true,
-                  t24: true,
-                  "bank": short.bank,//ACTUALIZA
-                  "transactId": Number(transactionId),
-                  "codeT24": short?.codeT24 ?? "",
-                  "dateT24": short?.dateT24 ?? "",//ACTUALIZA
-                  "debtId": record?.debtId,
-                }
-                await backendServices.updateBankRelationsDebtsLP(dataSet)
-
-              }
-            } else {
-              // si no existe un record en dataResult.getBankingRelationCPDTOList... siempre agregamos
-              let dataSet = {
-                "facilityType": long.facilityType,
-                "amount": Number(long.approvedAmount.toFixed(2)),
-                "date": long.startDate,
-                "expirationDate": long.endDate,
-                "debitBalance1": Number(long.balance.toFixed(2)),
-                "debitBalance2": 0,
-                "debitBalance3": 0,
-                "paymentHistory": long.paymentHistory,
-                "rate": 0,
-                "fee": 0,
-                "bail": 0,
-                "fundDestiny": "",
-                status: true,
-                t24: true,
-                "bank": long.bank,
-                "transactId": Number(transactionId),
-                "codeT24": long?.codeT24 ?? "",
-                "dateT24": long?.dateT24 ?? "",
-              }
-              await backendServices.newBankingRelationsDebtsLP(dataSet)
+      for (var long of dataResultCore.longTermresult) {
+        let record = dataResultLP == undefined || dataResultLP == null || dataResultLP.length == 0 ? undefined : dataResultLP.find(x => x.codigot24 == long?.codeT24 ?? "");
+        if (record !== undefined && record != null) {
+          if (long?.dateT24 ?? "" > record.fechat24) {
+            //Verificar si existe un record en dataResult.getBankingRelationCPDTOList con el mismo codeT24 .... si la fecha es mayor, actualizar amount, dateT24
+            let dataSet = {
+              "facilityType": record.facilityType,
+              "amount": Number(long?.approvedAmount ?? 0),//ACTUALIZA
+              "date": record?.startDate ?? "",
+              "expirationDate": record?.endDate ?? "",
+              "debitBalance1": Number(record?.balance ?? 0),
+              "debitBalance2": record.debitBalance2,
+              "debitBalance3": record.debitBalance3,
+              "paymentHistory": record.paymentHistory,
+              "rate": record.rate,
+              "fee": record.fee,
+              "bail": record.bail,
+              "fundDestiny": record.fundDestiny,
+              status: true,
+              t24: true,
+              "bank": record.bank,
+              "transactId": Number(transactionId),
+              "codigot24": long?.codeT24 ?? "",//ACTUALIZA
+              "fechat24": (moment(long?.dateT24, "DD/MM/YYYY").format("YYYY-MM-DD") == "Invalid date" ? moment().format("YYYY-MM-DD") : (moment(long?.dateT24, "DD/MM/YYYY").format("YYYY-MM-DD"))),//ACTUALIZA
+              "debtId": record?.debtId,
             }
+            await backendServices.updateBankRelationsDebtsLP(dataSet).then(resp => {
+
+            })
+          } else if (long?.dateT24 == "" || long?.dateT24 == null) {
+            //si no tiene fecha actualizar todo
+            let dataSet = {
+              "facilityType": long?.facilityType ?? " ",
+              "amount": Number(long?.approvedAmount ?? 0),//ACTUALIZA
+              "date": record?.startDate ?? "",
+              "expirationDate": record?.endDate ?? "",
+              "debitBalance1": Number(long?.balance ?? 0),//ACTUALIZA
+              "debitBalance2": record.debitBalance2,
+              "debitBalance3": record.debitBalance3,
+              "paymentHistory": long?.paymentHistory ?? " ",//ACTUALIZA
+              "rate": record.rate,
+              "fee": record.fee,
+              "bail": record.bail,
+              "fundDestiny": record.fundDestiny,
+              status: true,
+              t24: true,
+              "bank": long?.bank ?? " ",//ACTUALIZA
+              "transactId": Number(transactionId),
+              "codigot24": long?.codeT24 ?? "",
+              "fechat24": (moment(long?.dateT24, "DD/MM/YYYY").format("YYYY-MM-DD") == "Invalid date" ? moment().format("YYYY-MM-DD") : (moment(long?.dateT24, "DD/MM/YYYY").format("YYYY-MM-DD"))),//ACTUALIZA
+              "debtId": record?.debtId,
+            }
+            await backendServices.updateBankRelationsDebtsLP(dataSet).then(resp => {
+
+            })
+
           }
+        } else {
+          // si no existe un record en dataResult.getBankingRelationCPDTOList... siempre agregamos
+          let dataSet = {
+            "facilityType": long.facilityType,
+            "amount": Number(long?.approvedAmount ?? 0),
+            "date": record?.startDate ?? "",
+            "expirationDate": record?.endDate ?? "",
+            "debitBalance1": Number(long?.balance ?? 0),
+            "debitBalance2": 0,
+            "debitBalance3": 0,
+            "paymentHistory": long.paymentHistory,
+            "rate": 0,
+            "fee": 0,
+            "bail": 0,
+            "fundDestiny": "",
+            status: true,
+            t24: true,
+            "bank": long.bank,
+            "transactId": Number(transactionId),
+            "codigot24": long?.codeT24 ?? "",
+            "fechat24": (moment(long?.dateT24, "DD/MM/YYYY").format("YYYY-MM-DD") == "Invalid date" ? moment().format("YYYY-MM-DD") : (moment(long?.dateT24, "DD/MM/YYYY").format("YYYY-MM-DD"))),//ACTUALIZA
+          }
+          await backendServices.newBankingRelationsDebtsLP(dataSet).then(resp => {
+
+          })
         }
       }
-
     }
     catch (err) { console.error("newBankingRelationsDebts", err) }
   }

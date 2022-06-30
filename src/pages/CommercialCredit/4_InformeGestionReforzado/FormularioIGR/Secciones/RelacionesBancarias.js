@@ -360,7 +360,7 @@ const RelacionesBancarias = React.forwardRef((props, ref) => {
       //     setIsActiveLoadingT24(false)
       //   })
       // } else {
-        setIsActiveLoading(false)
+      setIsActiveLoading(false)
       // }
       dataReturn.sumatoriaDeudaLargo.monto = (dataReturn.dataTablDeudaLargo.reduce((total, currentValue) => total + Number(currentValue.amount), 0));
       dataReturn.sumatoriaDeudaLargo.saldo1 = (dataReturn.dataTablDeudaLargo.reduce((total, currentValue) => total + Number(currentValue.debitBalance1), 0));
@@ -472,6 +472,8 @@ const RelacionesBancarias = React.forwardRef((props, ref) => {
         t24: dataSet?.t24 ?? false,
         "fundDestiny": data.fundDestiny ?? " ",
         "bank": data.bank ?? " ",
+        "codigot24": "",
+        "fechat24":  moment().format("YYYY-MM-DD"),
         "transactId": Number(data?.transactId) ?? 0
       }
       // nuevoRelacionesBancariasDeudasCP
@@ -505,6 +507,8 @@ const RelacionesBancarias = React.forwardRef((props, ref) => {
         t24: dataSet?.t24 ?? false,
         "fundDestiny": data?.fundDestiny ?? " ",
         "bank": data?.bank ?? " ",
+        "codigot24": "",
+        "fechat24":  moment().format("YYYY-MM-DD"),
         "transactId": Number(data?.transactId) ?? 0
       }
       // nuevoRelacionesBancariasDeudasLP
@@ -610,6 +614,8 @@ const RelacionesBancarias = React.forwardRef((props, ref) => {
         "bail": data?.bail ?? "",
         "fundDestiny": data?.fundDestiny ?? "",
         "bank": data?.bank ?? "",
+        "codigot24": "",
+        "fechat24":  moment().format("YYYY-MM-DD"),
         "transactId": Number(data?.transactId) ?? 0,
         "debtId": data?.debtId ?? 0,
         "status": true,
@@ -647,6 +653,8 @@ const RelacionesBancarias = React.forwardRef((props, ref) => {
         "bail": data?.bail ?? "",
         "fundDestiny": data?.fundDestiny ?? "",
         "bank": data?.bank ?? "",
+        "codigot24": "",
+        "fechat24":  moment().format("YYYY-MM-DD"),
         "transactId": Number(data?.transactId) ?? 0,
         "debtId": data?.debtId ?? "",
         "status": true,
@@ -976,158 +984,158 @@ const RelacionesBancarias = React.forwardRef((props, ref) => {
     <React.Fragment>
       {/* <LoadingOverlay active={isActiveLoading} spinner text={t("Processinginformation")}> */}
 
-          <h5 className="card-title">{t("CurrentBankingRelations")}</h5>
-          <p className="card-title-desc"></p>
+      <h5 className="card-title">{t("CurrentBankingRelations")}</h5>
+      <p className="card-title-desc"></p>
 
 
-          <Row>
-            <Col md="6">
-              <h5 className="card-sub-title">{t("ShortTermDebts")}</h5>
-            </Col>
-            {props?.activacion ? null :
-              <Col md="6" style={{ textAlign: "right" }}>
-                <Button className="btn" color="success" type="button" style={{ margin: '5px' }} onClick={() => {
-                  setTipo("CP"); setbotonValidation(true); setdataSet({
-                    transactId: 0,
-                    bank: null,
-                    facilityType: null,
-                    amount: 0,
-                    date: null,
-                    expirationDate: null,
-                    debitBalance1: 0,
-                    debitBalance2: 0,
-                    debitBalance3: 0,
-                    paymentHistory: "",
-                    rate: 0,
-                    fee: 0,
-                    bail: null,
-                    destinationOfFunds: null
-                  }); toggleShowModalDeudasCortoPlazo(true)
-                }} title={t("Add")}><i className="fas fa-lg fa-plus-circle"></i> {(" ")}</Button>
-              </Col>}
-          </Row>
-          {/* <LoadingOverlay active={isActiveLoading || isActiveLoadingT24} spinner text={t("WaitingPlease")}> */}
+      <Row>
+        <Col md="6">
+          <h5 className="card-sub-title">{t("ShortTermDebts")}</h5>
+        </Col>
+        {props?.activacion ? null :
+          <Col md="6" style={{ textAlign: "right" }}>
+            <Button className="btn" color="success" type="button" style={{ margin: '5px' }} onClick={() => {
+              setTipo("CP"); setbotonValidation(true); setdataSet({
+                transactId: 0,
+                bank: null,
+                facilityType: null,
+                amount: 0,
+                date: null,
+                expirationDate: null,
+                debitBalance1: 0,
+                debitBalance2: 0,
+                debitBalance3: 0,
+                paymentHistory: "",
+                rate: 0,
+                fee: 0,
+                bail: null,
+                destinationOfFunds: null
+              }); toggleShowModalDeudasCortoPlazo(true)
+            }} title={t("Add")}><i className="fas fa-lg fa-plus-circle"></i> {(" ")}</Button>
+          </Col>}
+      </Row>
+      {/* <LoadingOverlay active={isActiveLoading || isActiveLoadingT24} spinner text={t("WaitingPlease")}> */}
 
-          <div className="table-responsive styled-table-div">
+      <div className="table-responsive styled-table-div">
 
-            <Table className="table table-striped table-hover styled-table table" >
-              <thead  >
-                <tr>
-                  <th>{t("Bank")}</th>
-                  <th>{t("FacilityType")}</th>
-                  <th>{t("ApprovedAmount")}</th>
-                  <th>{t("GrantDate")}</th>
-                  <th>{t("DueDate")}</th>
-                  <th>{t("Debit") + " " + t("CurrentYear")}</th>
-                  <th> {t("Debit") + " 1 " + t("YearAgo")}</th>
-                  <th> {t("Debit") + " 2 " + t("YearAgo")}</th>
-                  <th>{t("PaymentHistory")}</th>
-                  <th>{t("Rate")}</th>
-                  <th>{t("Surety")}</th>
-                  <th>{t("Term of the Promissory Notes (days)")}</th>
-                  <th>{t("DestinationOfFunds")}</th>
-                  <th style={{ textAlign: "right" }}>{" "}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {shorttermdebtsRows}
-                <tr>
-                  <th>{t("Total")}</th>
-                  <th></th>
-                  <th>${currencyData.formatTable(((dataReturn?.sumatoriaDeudaCorto?.monto ?? 0)).toFixed(2))}</th>
-                  <th></th>
-                  <th></th>
-                  <th>${currencyData.formatTable(((dataReturn?.sumatoriaDeudaCorto?.saldo1 ?? 0)).toFixed(2))}</th>
-                  <th>${currencyData.formatTable(parseFloat(dataReturn?.sumatoriaDeudaCorto?.saldo2 ?? 0).toFixed(2))}</th>
-                  <th>${currencyData.formatTable(parseFloat(dataReturn?.sumatoriaDeudaCorto?.saldo3 ?? 0).toFixed(2))}</th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                </tr>
-              </tbody>
-            </Table>
-          </div>
-          <h5 className="card-sub-title">{""}</h5>
+        <Table className="table table-striped table-hover styled-table table" >
+          <thead  >
+            <tr>
+              <th>{t("Bank")}</th>
+              <th>{t("FacilityType")}</th>
+              <th>{t("ApprovedAmount")}</th>
+              <th>{t("GrantDate")}</th>
+              <th>{t("DueDate")}</th>
+              <th>{t("Debit") + " " + t("CurrentYear")}</th>
+              <th> {t("Debit") + " 1 " + t("YearAgo")}</th>
+              <th> {t("Debit") + " 2 " + t("YearAgo")}</th>
+              <th>{t("PaymentHistory")}</th>
+              <th>{t("Rate")}</th>
+              <th>{t("Surety")}</th>
+              <th>{t("Term of the Promissory Notes (days)")}</th>
+              <th>{t("DestinationOfFunds")}</th>
+              <th style={{ textAlign: "right" }}>{" "}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {shorttermdebtsRows}
+            <tr>
+              <th>{t("Total")}</th>
+              <th></th>
+              <th>${currencyData.formatTable(((dataReturn?.sumatoriaDeudaCorto?.monto ?? 0)).toFixed(2))}</th>
+              <th></th>
+              <th></th>
+              <th>${currencyData.formatTable(((dataReturn?.sumatoriaDeudaCorto?.saldo1 ?? 0)).toFixed(2))}</th>
+              <th>${currencyData.formatTable(parseFloat(dataReturn?.sumatoriaDeudaCorto?.saldo2 ?? 0).toFixed(2))}</th>
+              <th>${currencyData.formatTable(parseFloat(dataReturn?.sumatoriaDeudaCorto?.saldo3 ?? 0).toFixed(2))}</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </tbody>
+        </Table>
+      </div>
+      <h5 className="card-sub-title">{""}</h5>
 
-          <Row>
-            <Col md="6">
-              <h5 className="card-sub-title">{t("LongTermDebts")}</h5>
-            </Col>
-            {props?.activacion ? null :
-              <Col md="6" style={{ textAlign: "right" }}>
-                <Button className="btn" color="success" type="button" style={{ margin: '5px' }} onClick={() => {
-                  setTipo("CL"); setbotonValidation(true); setdataSet({
-                    transactId: 0,
-                    bank: null,
-                    facilityType: null,
-                    amount: 0,
-                    date: null,
-                    expirationDate: null,
-                    debitBalance1: 0,
-                    debitBalance2: 0,
-                    debitBalance3: 0,
-                    paymentHistory: "",
-                    rate: 0,
-                    fee: 0,
-                    bail: null,
-                    destinationOfFunds: null
-                  }); toggleShowModalDeudasLargoPlazo(true)
-                }} title={t("Add")}><i className="fas fa-lg fa-plus-circle"></i> {(" ")}</Button>
-              </Col>}
-          </Row>
-          <div className="table-responsive styled-table-div">
-            <Table className="table table-striped table-hover styled-table table" >
-              <thead>
-                <tr>
-                  <th>{t("Bank")}</th>
-                  <th>{t("FacilityType")}</th>
-                  <th>{t("ApprovedAmount")}</th>
-                  <th>{t("GrantDate")}</th>
-                  <th>{t("DueDate")}</th>
-                  <th>{t("Debit") + " " + t("CurrentYear")}</th>
-                  <th> {t("Debit") + " 1 " + t("YearAgo")}</th>
-                  <th> {t("Debit") + " 2 " + t("YearAgo")}</th>
-                  <th>{t("PaymentHistory")}</th>
-                  <th>{t("Rate")}</th>
-                  <th>{t("Surety")}</th>
-                  <th>{t("Quotes")}</th>
-                  <th>{t("DestinationOfFunds")}</th>
-                  <th style={{ textAlign: "right" }}></th>
-                </tr>
-              </thead>
-              <tbody>
+      <Row>
+        <Col md="6">
+          <h5 className="card-sub-title">{t("LongTermDebts")}</h5>
+        </Col>
+        {props?.activacion ? null :
+          <Col md="6" style={{ textAlign: "right" }}>
+            <Button className="btn" color="success" type="button" style={{ margin: '5px' }} onClick={() => {
+              setTipo("CL"); setbotonValidation(true); setdataSet({
+                transactId: 0,
+                bank: null,
+                facilityType: null,
+                amount: 0,
+                date: null,
+                expirationDate: null,
+                debitBalance1: 0,
+                debitBalance2: 0,
+                debitBalance3: 0,
+                paymentHistory: "",
+                rate: 0,
+                fee: 0,
+                bail: null,
+                destinationOfFunds: null
+              }); toggleShowModalDeudasLargoPlazo(true)
+            }} title={t("Add")}><i className="fas fa-lg fa-plus-circle"></i> {(" ")}</Button>
+          </Col>}
+      </Row>
+      <div className="table-responsive styled-table-div">
+        <Table className="table table-striped table-hover styled-table table" >
+          <thead>
+            <tr>
+              <th>{t("Bank")}</th>
+              <th>{t("FacilityType")}</th>
+              <th>{t("ApprovedAmount")}</th>
+              <th>{t("GrantDate")}</th>
+              <th>{t("DueDate")}</th>
+              <th>{t("Debit") + " " + t("CurrentYear")}</th>
+              <th> {t("Debit") + " 1 " + t("YearAgo")}</th>
+              <th> {t("Debit") + " 2 " + t("YearAgo")}</th>
+              <th>{t("PaymentHistory")}</th>
+              <th>{t("Rate")}</th>
+              <th>{t("Surety")}</th>
+              <th>{t("Quotes")}</th>
+              <th>{t("DestinationOfFunds")}</th>
+              <th style={{ textAlign: "right" }}></th>
+            </tr>
+          </thead>
+          <tbody>
 
-                {longtermdebtsRows}
-                <tr>
-                  <th>{t("Total")}</th>
-                  <th></th>
-                  <th>${currencyData.formatTable(((dataReturn?.sumatoriaDeudaLargo?.monto ?? 0)).toFixed(2))}</th>
-                  <th></th>
-                  <th></th>
-                  <th>${currencyData.formatTable(((dataReturn?.sumatoriaDeudaLargo?.saldo1 ?? 0)).toFixed(2))}</th>
-                  <th>${currencyData.formatTable(parseFloat(dataReturn?.sumatoriaDeudaLargo?.saldo2 ?? 0).toFixed(2))}</th>
-                  <th>${currencyData.formatTable(parseFloat(dataReturn?.sumatoriaDeudaLargo?.saldo3 ?? 0).toFixed(2))}</th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                </tr>
-              </tbody>
-            </Table>
-          </div>
-          {/* </LoadingOverlay> */}
+            {longtermdebtsRows}
+            <tr>
+              <th>{t("Total")}</th>
+              <th></th>
+              <th>${currencyData.formatTable(((dataReturn?.sumatoriaDeudaLargo?.monto ?? 0)).toFixed(2))}</th>
+              <th></th>
+              <th></th>
+              <th>${currencyData.formatTable(((dataReturn?.sumatoriaDeudaLargo?.saldo1 ?? 0)).toFixed(2))}</th>
+              <th>${currencyData.formatTable(parseFloat(dataReturn?.sumatoriaDeudaLargo?.saldo2 ?? 0).toFixed(2))}</th>
+              <th>${currencyData.formatTable(parseFloat(dataReturn?.sumatoriaDeudaLargo?.saldo3 ?? 0).toFixed(2))}</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </tbody>
+        </Table>
+      </div>
+      {/* </LoadingOverlay> */}
 
-          <h5 className="card-sub-title">{""}</h5>
-          <Row>
-            <Col md="6">
-              <h5 className="card-sub-title">{t("ActualSow")}</h5>
-            </Col>
-            {/**
+      <h5 className="card-sub-title">{""}</h5>
+      <Row>
+        <Col md="6">
+          <h5 className="card-sub-title">{t("ActualSow")}</h5>
+        </Col>
+        {/**
             <Col md="6" style={{ textAlign: "right" }}>
               <Button className="btn" color="success" type="button" style={{ margin: '5px' }} onClick={() => {
                 setdataSet({
@@ -1139,35 +1147,35 @@ const RelacionesBancarias = React.forwardRef((props, ref) => {
                 }); setTipo("Actual"); toggleShowModalSow(true)
               }} title={t("Add")}><i className="fas fa-lg fa-plus-circle"></i> {(" ")}</Button>
             </Col> */}
-          </Row>
-          <div className="table-responsive styled-table-div">
-            <Table className="table table-striped table-hover styled-table table" >
-              <thead >
-                <tr>
-                  <th>{t("OtherBank")}</th>
-                  <th>{t("Banesco")}</th>
-                  <th>{t("Total")}</th>
-                  <th>{t("Sow")}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {sowApproved ?
-                  <tr key={uniq_key() + "6"}>
-                    <td data-label={t("OtherBank")}>${currencyData.formatTable((sowApproved.otherBank ?? 0).toFixed(2))}</td>
-                    <td data-label={t("Banesco")}>${currencyData.formatTable((sowApproved.banesco ?? 0).toFixed(2))}</td>
-                    <td data-label={t("Total")}>${currencyData.formatTable((sowApproved.total ?? 0).toFixed(2))}</td>
-                    <td data-label={t("Sow")}>{currencyData.format((sowApproved.sow ?? 0).toFixed(2))}%</td>
-                  </tr> : null}
-                {/*sowactualRows*/}
-              </tbody>
-            </Table>
-          </div>
-          <h5 className="card-sub-title">{""}</h5>
-          <Row>
-            <Col md="6">
-              <h5 className="card-sub-title">{t("ProposedSow")}</h5>
-            </Col>
-            {/**
+      </Row>
+      <div className="table-responsive styled-table-div">
+        <Table className="table table-striped table-hover styled-table table" >
+          <thead >
+            <tr>
+              <th>{t("OtherBank")}</th>
+              <th>{t("Banesco")}</th>
+              <th>{t("Total")}</th>
+              <th>{t("Sow")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sowApproved ?
+              <tr key={uniq_key() + "6"}>
+                <td data-label={t("OtherBank")}>${currencyData.formatTable((sowApproved.otherBank ?? 0).toFixed(2))}</td>
+                <td data-label={t("Banesco")}>${currencyData.formatTable((sowApproved.banesco ?? 0).toFixed(2))}</td>
+                <td data-label={t("Total")}>${currencyData.formatTable((sowApproved.total ?? 0).toFixed(2))}</td>
+                <td data-label={t("Sow")}>{currencyData.format((sowApproved.sow ?? 0).toFixed(2))}%</td>
+              </tr> : null}
+            {/*sowactualRows*/}
+          </tbody>
+        </Table>
+      </div>
+      <h5 className="card-sub-title">{""}</h5>
+      <Row>
+        <Col md="6">
+          <h5 className="card-sub-title">{t("ProposedSow")}</h5>
+        </Col>
+        {/**
             <Col md="6" style={{ textAlign: "right" }}>
               <Button className="btn" color="success" type="button" style={{ margin: '5px' }} onClick={() => {
                 setdataSet({
@@ -1179,169 +1187,169 @@ const RelacionesBancarias = React.forwardRef((props, ref) => {
                 }); setTipo("Propuesto"); toggleShowModalSow(true)
               }} title={t("Add")}><i className="fas fa-lg fa-plus-circle"></i> {(" ")}</Button>
             </Col> */}
-          </Row>
-          <div className="table-responsive styled-table-div">
-            <Table className="table table-striped table-hover styled-table table">
-              <thead>
-                <tr>
-                  <th>{t("OtherBank")}</th>
-                  <th>{t("Banesco")}</th>
-                  <th>{t("Total")}</th>
-                  <th>{t("Sow")}</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {sowproposedRows == null && sowProposal ?
-                  <tr key={uniq_key() + "5"}>
-                    <td data-label={t("OtherBank")}>${currencyData.formatTable((sowProposal?.otherBank ?? 0).toFixed(2))}</td>
-                    <td data-label={t("Banesco")}>${currencyData.formatTable((sowProposal?.banesco ?? 0).toFixed(2))}</td>
-                    <td data-label={t("Total")}>${currencyData.formatTable((sowProposal?.total ?? 0).toFixed(2))}</td>
-                    <td data-label={t("Sow")}>{currencyData.format((sowProposal?.sow ?? 0).toFixed(2))}%</td>
-                    <td data-label={t("Actions")} style={{ textAlign: "right", display: "flex" }}>
-                      {props?.activacion ? null :
-                        <Button type="button" color="link" onClick={(resp) => { editSowProposed({ otherBanks: parseFloat(sowProposal?.otherBank).toFixed(2), banesco: parseFloat(sowProposal?.banesco).toFixed(2), total: parseFloat(sowProposal?.total).toFixed(2), sow: parseFloat(sowProposal?.sow).toFixed(2) }) }} className="btn btn-link" ><i className="mdi mdi-border-color mdi-24px"></i></Button>
-                      }
-                    </td>
-                  </tr> : sowproposedRows}
-              </tbody>
-            </Table>
-          </div>
-          {props?.activacion ? null :
-            <>
-              <h5 className="card-sub-title">{""}</h5>
-              <AvForm id="frmRelacionesBancaria" className="needs-validation" onSubmit={handleSubmit}>
-                <Row>
-                  <Col md="6">
-                    <h5 className="card-sub-title">{t("Details")}</h5>
-                  </Col>
-                </Row>
-                <div className="mb-3">
-                  <AvField
-                    type="textarea"
-                    name="companyHistoryDetails"
-                    id="companyHistoryDetails"
-                    maxLength="1000"
-                    rows="7"
-                    value={props.dataRelacionesBancarias.observations}
-                    onChange={(e) => { setdataReturn({ observations: e.target.value }) }}
-                  />
-                </div>
-              </AvForm >
-            </>
-          }
-          <ModalDeudasCortoPlazo updateData={updateData} botones={botonValidation} jsonSow={dataSet} saveData={saveData} tipo={tipo} isOpen={showModalDeudasCortoPlazo} toggle={() => { toggleShowModalDeudasCortoPlazo(false) }} />
-          <ModalDeudasLargoPlazo updateData={updateData} botones={botonValidation} jsonSow={dataSet} saveData={saveData} tipo={tipo} isOpen={showModalDeudasLargoPlazo} toggle={() => { toggleShowModalDeudasLargoPlazo(false) }} />
-          <ModalSow updateData={updateData} botones={botonValidation} jsonSow={dataSet} saveData={saveData} tipo={tipo} isOpen={showModalSow} toggle={() => { toggleShowModalSow(false) }} />
-          {/* LLAMADA A LOS COMPONENTES DE ALERTA PARA MENSAJES DE CONFIRMACION */}
-          {
-            successSave_dlg ? (
-              <SweetAlert
-                success
-                title={t("SuccessDialog")}
-                confirmButtonText={t("Confirm")}
-                cancelButtonText={t("Cancel")}
-                onConfirm={() => {
-                  setsuccessSave_dlg(false)
-                  initializeData(locationData);
-                }}
-              >
-                {t("SuccessSaveMessage")}
-              </SweetAlert>
-            ) : null
-          }
-          {
-            error_dlg ? (
-              <SweetAlert
-                error
-                title={t("ErrorDialog")}
-                confirmButtonText={t("Confirm")}
-                cancelButtonText={t("Cancel")}
-                onConfirm={() => {
-                  seterror_dlg(false)
-                  initializeData(locationData);
-                }}
-              >
-                {error_msg}
-              </SweetAlert>
-            ) : null
-          }
-          {
-            confirm_alert ? (
-              <SweetAlert
-                title={t("Areyousure")}
-                warning
-                showCancel
-                confirmButtonText={t("Yesdeleteit")}
-                cancelButtonText={t("Cancel")}
-                confirmBtnBsStyle="success"
-                cancelBtnBsStyle="danger"
-                onConfirm={() => {
-                  const apiBack = new BackendServices();
-                  if (tipo == "Actual") {
-                    // eliminarSowActualIGR
-                    apiBack.removeSowCurrentIGR({ transactId: locationData.transactionId, currentSowId: dataDelete.currentSowId }).then(resp => {
-                      if (resp.statusCode == "500") {
-                        setconfirm_alert(false)
-                        seterror_dlg(false)
-                      } else {
-                        setconfirm_alert(false)
-                        initializeData(locationData);
-                      }
-                    }).catch(error => {
-                      setconfirm_alert(false)
-                      seterror_dlg(false)
-                    })
-                  } else if (tipo == "Propuesto") {
-                    // eliminarSowPropuestoIGR
-                    apiBack.deleteSowProposedIGR({ transactId: locationData.transactionId, currentSowId: dataDelete.currentSowId, status: false }).then(resp => {
-                      if (resp.statusCode == "500") {
-                        setconfirm_alert(false)
-                        seterror_dlg(false)
-                      } else {
-                        setconfirm_alert(false)
-                        initializeData(locationData);
-                      }
-                    }).catch(error => {
-                      setconfirm_alert(false)
-                      seterror_dlg(false)
-                    })
-                  } else if (tipo == "DCP") {
-                    // eliminarRelacionesBancariasDeudasCP
-                    apiBack.eliminateBankingRelationshipsDebtsCP({ transactId: locationData.transactionId, debtId: dataDelete.debtId, status: false }).then(resp => {
-                      if (resp.statusCode == "500") {
-                        setconfirm_alert(false)
-                        seterror_dlg(false)
-                      } else {
-                        setconfirm_alert(false)
-                        initializeData(locationData);
-                      }
-                    }).catch(error => {
-                      setconfirm_alert(false)
-                      seterror_dlg(false)
-                    })
-                  } else if (tipo == "DCL") {
-                    // eliminarRelacionesBancariasDeudasLP
-                    apiBack.eliminateBankingRelationshipsDebtsLP({ transactId: locationData.transactionId, debtId: dataDelete.debtId, status: false }).then(resp => {
-                      if (resp.statusCode == "500") {
-                        setconfirm_alert(false)
-                        seterror_dlg(false)
-                      } else {
-                        setconfirm_alert(false)
-                        initializeData(locationData);
-                      }
-                    }).catch(error => {
-                      setconfirm_alert(false)
-                      seterror_dlg(false)
-                    })
+      </Row>
+      <div className="table-responsive styled-table-div">
+        <Table className="table table-striped table-hover styled-table table">
+          <thead>
+            <tr>
+              <th>{t("OtherBank")}</th>
+              <th>{t("Banesco")}</th>
+              <th>{t("Total")}</th>
+              <th>{t("Sow")}</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {sowproposedRows == null && sowProposal ?
+              <tr key={uniq_key() + "5"}>
+                <td data-label={t("OtherBank")}>${currencyData.formatTable((sowProposal?.otherBank ?? 0).toFixed(2))}</td>
+                <td data-label={t("Banesco")}>${currencyData.formatTable((sowProposal?.banesco ?? 0).toFixed(2))}</td>
+                <td data-label={t("Total")}>${currencyData.formatTable((sowProposal?.total ?? 0).toFixed(2))}</td>
+                <td data-label={t("Sow")}>{currencyData.format((sowProposal?.sow ?? 0).toFixed(2))}%</td>
+                <td data-label={t("Actions")} style={{ textAlign: "right", display: "flex" }}>
+                  {props?.activacion ? null :
+                    <Button type="button" color="link" onClick={(resp) => { editSowProposed({ otherBanks: parseFloat(sowProposal?.otherBank).toFixed(2), banesco: parseFloat(sowProposal?.banesco).toFixed(2), total: parseFloat(sowProposal?.total).toFixed(2), sow: parseFloat(sowProposal?.sow).toFixed(2) }) }} className="btn btn-link" ><i className="mdi mdi-border-color mdi-24px"></i></Button>
                   }
-                }}
-                onCancel={() => setconfirm_alert(false)}
-              >
-                {t("Youwontbeabletorevertthis")}
-              </SweetAlert>
-            ) : null
-          }
+                </td>
+              </tr> : sowproposedRows}
+          </tbody>
+        </Table>
+      </div>
+      {props?.activacion ? null :
+        <>
+          <h5 className="card-sub-title">{""}</h5>
+          <AvForm id="frmRelacionesBancaria" className="needs-validation" onSubmit={handleSubmit}>
+            <Row>
+              <Col md="6">
+                <h5 className="card-sub-title">{t("Details")}</h5>
+              </Col>
+            </Row>
+            <div className="mb-3">
+              <AvField
+                type="textarea"
+                name="companyHistoryDetails"
+                id="companyHistoryDetails"
+                maxLength="1000"
+                rows="7"
+                value={props.dataRelacionesBancarias.observations}
+                onChange={(e) => { setdataReturn({ observations: e.target.value }) }}
+              />
+            </div>
+          </AvForm >
+        </>
+      }
+      <ModalDeudasCortoPlazo updateData={updateData} botones={botonValidation} jsonSow={dataSet} saveData={saveData} tipo={tipo} isOpen={showModalDeudasCortoPlazo} toggle={() => { toggleShowModalDeudasCortoPlazo(false) }} />
+      <ModalDeudasLargoPlazo updateData={updateData} botones={botonValidation} jsonSow={dataSet} saveData={saveData} tipo={tipo} isOpen={showModalDeudasLargoPlazo} toggle={() => { toggleShowModalDeudasLargoPlazo(false) }} />
+      <ModalSow updateData={updateData} botones={botonValidation} jsonSow={dataSet} saveData={saveData} tipo={tipo} isOpen={showModalSow} toggle={() => { toggleShowModalSow(false) }} />
+      {/* LLAMADA A LOS COMPONENTES DE ALERTA PARA MENSAJES DE CONFIRMACION */}
+      {
+        successSave_dlg ? (
+          <SweetAlert
+            success
+            title={t("SuccessDialog")}
+            confirmButtonText={t("Confirm")}
+            cancelButtonText={t("Cancel")}
+            onConfirm={() => {
+              setsuccessSave_dlg(false)
+              initializeData(locationData);
+            }}
+          >
+            {t("SuccessSaveMessage")}
+          </SweetAlert>
+        ) : null
+      }
+      {
+        error_dlg ? (
+          <SweetAlert
+            error
+            title={t("ErrorDialog")}
+            confirmButtonText={t("Confirm")}
+            cancelButtonText={t("Cancel")}
+            onConfirm={() => {
+              seterror_dlg(false)
+              initializeData(locationData);
+            }}
+          >
+            {error_msg}
+          </SweetAlert>
+        ) : null
+      }
+      {
+        confirm_alert ? (
+          <SweetAlert
+            title={t("Areyousure")}
+            warning
+            showCancel
+            confirmButtonText={t("Yesdeleteit")}
+            cancelButtonText={t("Cancel")}
+            confirmBtnBsStyle="success"
+            cancelBtnBsStyle="danger"
+            onConfirm={() => {
+              const apiBack = new BackendServices();
+              if (tipo == "Actual") {
+                // eliminarSowActualIGR
+                apiBack.removeSowCurrentIGR({ transactId: locationData.transactionId, currentSowId: dataDelete.currentSowId }).then(resp => {
+                  if (resp.statusCode == "500") {
+                    setconfirm_alert(false)
+                    seterror_dlg(false)
+                  } else {
+                    setconfirm_alert(false)
+                    initializeData(locationData);
+                  }
+                }).catch(error => {
+                  setconfirm_alert(false)
+                  seterror_dlg(false)
+                })
+              } else if (tipo == "Propuesto") {
+                // eliminarSowPropuestoIGR
+                apiBack.deleteSowProposedIGR({ transactId: locationData.transactionId, currentSowId: dataDelete.currentSowId, status: false }).then(resp => {
+                  if (resp.statusCode == "500") {
+                    setconfirm_alert(false)
+                    seterror_dlg(false)
+                  } else {
+                    setconfirm_alert(false)
+                    initializeData(locationData);
+                  }
+                }).catch(error => {
+                  setconfirm_alert(false)
+                  seterror_dlg(false)
+                })
+              } else if (tipo == "DCP") {
+                // eliminarRelacionesBancariasDeudasCP
+                apiBack.eliminateBankingRelationshipsDebtsCP({ transactId: locationData.transactionId, debtId: dataDelete.debtId, status: false }).then(resp => {
+                  if (resp.statusCode == "500") {
+                    setconfirm_alert(false)
+                    seterror_dlg(false)
+                  } else {
+                    setconfirm_alert(false)
+                    initializeData(locationData);
+                  }
+                }).catch(error => {
+                  setconfirm_alert(false)
+                  seterror_dlg(false)
+                })
+              } else if (tipo == "DCL") {
+                // eliminarRelacionesBancariasDeudasLP
+                apiBack.eliminateBankingRelationshipsDebtsLP({ transactId: locationData.transactionId, debtId: dataDelete.debtId, status: false }).then(resp => {
+                  if (resp.statusCode == "500") {
+                    setconfirm_alert(false)
+                    seterror_dlg(false)
+                  } else {
+                    setconfirm_alert(false)
+                    initializeData(locationData);
+                  }
+                }).catch(error => {
+                  setconfirm_alert(false)
+                  seterror_dlg(false)
+                })
+              }
+            }}
+            onCancel={() => setconfirm_alert(false)}
+          >
+            {t("Youwontbeabletorevertthis")}
+          </SweetAlert>
+        ) : null
+      }
       {/* </LoadingOverlay> */}
     </React.Fragment >
   );

@@ -1,6 +1,6 @@
 {
   "name": "banesco-creditoscomerciales",
-  "version": "1.0.206",
+  "version": "1.0.207",
   "private": true,
   "dependencies": {
     "@fullcalendar/bootstrap": "^5.5.0",
@@ -120,5 +120,5 @@
     "miragejs": "^0.1.42",
     "node-sass": "^5.0.0"
   },
-  "buildDate": 1656600770265
+  "buildDate": 1656604521169
 }

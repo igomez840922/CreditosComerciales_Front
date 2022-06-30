@@ -64,16 +64,16 @@ const fakeBackend = () => {
     let validatorLogin = false;
     let instancia = new ApiServiceAuth();
 
-    const api=new BackendServices();    
-    var dataUser =  await api.getUserInfo(usr,psw);
+    const api = new BackendServices();
+    var dataUser = await api.getUserInfo(usr, psw);
     if (dataUser !== undefined) {
       if (dataUser.status == 200) {
-        if(dataUser.result!==null && dataUser.result!== undefined){
+        if (dataUser.result !== null && dataUser.result !== undefined) {
           var menberof = dataUser.result.menberOf;
-          email=dataUser.result.userprincipalName.split(':')[1].trim();
-          isAnalysisSupervisor = menberof != null && (menberof.indexOf('CN='+opt.Grp_SupervisorAnalisisCredito) >= 0)?true:false;
-          isAdmin= menberof != null && menberof.indexOf('CN='+opt.Grp_Administrador) >= 0?true:false;
-          console.log('dataUser',dataUser,email);
+          email = dataUser.result.userprincipalName.split(':')[1].trim();
+          isAnalysisSupervisor = menberof != null && (menberof.indexOf('CN=' + opt.Grp_SupervisorAnalisisCredito) >= 0) ? true : false;
+          isAdmin = menberof != null && menberof.indexOf('CN=' + opt.Grp_Administrador) >= 0 ? true : false;
+          console.log('dataUser', dataUser, email);
           if (menberof != null && menberof.indexOf('OU=RHPAM') >= 0) {
             await instancia.post(url.URL_BPM_LOGIN, {}, {}, auth).then(resp => {
               validatorLogin = resp.data.body != null && resp.data.body.Autentication == true ? true : false;
@@ -89,7 +89,7 @@ const fakeBackend = () => {
           } else {
             toastr.error("El usuario no esta configurado en los grupos para acceder a la aplicacion", 'Error!');
           }
-        }else{
+        } else {
           toastr.error("Se ha presentado un error al obtener la informacion del usuario", 'Error!');
         }
 
@@ -100,10 +100,10 @@ const fakeBackend = () => {
 
     //validatorLogin = true;//Trampa para entrar
     if (validatorLogin === true) {
-// alert()
+      // alert()
 
       if (validatorLogin === true) {
-        localStorageHelper.save(opt.VARNAME_USRCREDENTIAL, { usr: usr, psw: psw, email: email, isAnalysisSupervisor: isAnalysisSupervisor, isAdmin: isAdmin});
+        localStorageHelper.save(opt.VARNAME_USRCREDENTIAL, { usr: usr, psw: psw, email: email, isAnalysisSupervisor: isAnalysisSupervisor, isAdmin: isAdmin, menberof });
       }
 
       return new Promise((resolve, reject) => {

@@ -13,7 +13,7 @@ export const useFormQuoter = (initialForm) => {
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
   const [typePerson, setTypePerson] = useState(true);
-  const [selectionFields, setselectionFields] = useState(optionsPersonType);
+  const [enabledAbono, setEnabledAbono] = useState(false);
   const [disableFeci, setDisableFeci] = useState(true);
   const [disableDefinedFee, setDisableDefinedFee] = useState(true);
   const [disableTerm, setDisableTerm] = useState(false);
@@ -131,6 +131,11 @@ export const useFormQuoter = (initialForm) => {
 
   const auxSelectFields = (selectFieldName, selectedValue) => {
     switch (selectFieldName) {
+      case "loanType":
+        selectedValue === "abono"
+          ? setEnabledAbono(true)
+          : setEnabledAbono(false);
+        return;
       case "feciSelect":
         const disableFeci = selectedValue === "Si" ? false : true;
         setDisableFeci(disableFeci);
@@ -152,6 +157,12 @@ export const useFormQuoter = (initialForm) => {
         return;
       default:
         break;
+    }
+  };
+
+  const enableAbonoOptions = (typeQuoter) => {
+    if (typeQuoter === "abono") {
+      setEnabledAbono(true);
     }
   };
 
@@ -177,6 +188,7 @@ export const useFormQuoter = (initialForm) => {
     disableDefinedFee,
     disableTerm,
     disableGracePeriod,
+    enableAbono: enabledAbono,
     optionsIdTypes,
     optionsCountries,
     optionsBanks,

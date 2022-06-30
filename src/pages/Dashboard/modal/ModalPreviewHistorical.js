@@ -11,7 +11,6 @@ import PreviewHistorical from "./PreviewHistorical";
 const ModalPreviewHistorical = (props) => {
     const [t] = translationHelpers('translation');
     React.useEffect(() => {
-        console.log({ props })
     }, [props])
 
     return (

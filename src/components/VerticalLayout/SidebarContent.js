@@ -143,17 +143,21 @@ const SidebarContent = props => {
   const [condicion, setcondicion] = useState(true);
 
   React.useEffect(() => {
-    try {
-      const { menberof } = localStorageHelper.get(opt.VARNAME_USRCREDENTIAL);
+    const menberof = localStorageHelper.get(opt.VARNAME_USRCREDENTIAL)?.menberof ?? '';
 
-      const groups = [opt.Grp_Administrador, opt.Grp_EtECC_Ejecutivo]
+    const groups = [opt.Grp_Administrador, opt.Grp_EtECC_Ejecutivo]
 
-      setcondicion(groups.some(group => group === menberof.split(',')[0].replace(': CN=', '')))
+    setcondicion(groups.some(group => group === menberof?.split(',')[0]?.replace(': CN=', '')))
+    // try {
+    //   const { menberof } = localStorageHelper.get(opt.VARNAME_USRCREDENTIAL);
 
-    } catch (error) {
-      // localStorageHelper.delete(opt.VARNAME_USRCREDENTIAL);
-      // history.push("/logout");
-    }
+    //   const groups = [opt.Grp_Administrador, opt.Grp_EtECC_Ejecutivo]
+
+    //   setcondicion(groups.some(group => group === menberof.split(',')[0].replace(': CN=', '')))
+    // } catch (error) {
+    //   // localStorageHelper.delete(opt.VARNAME_USRCREDENTIAL);
+    //   // history.push("/logout");
+    // }
     // if (usrname === "admintest" || usrname === "ETECCNegocio1" || usrname === "adminBanesco") {
     // } else {
     //   setcondicion(false);

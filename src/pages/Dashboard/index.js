@@ -116,7 +116,7 @@ const Dashboard = () => {
               {$$.action}
 
               {
-                $$.data.grupoldap !==undefined && $$.data.grupoldap !==null && (credentials.isAnalysisSupervisor || credentials.isAdmin)  ?
+                $$.data.grupoldap !== undefined && $$.data.grupoldap !== null && (credentials.isAnalysisSupervisor || credentials.isAdmin) ?
                   <Link to="#" onClick={(e) => { settransferData($$); setShowModalTransfer(true) }}>
                     <i className="mdi mdi-transit-transfer mdi-24px"></i>
                   </Link>
@@ -126,15 +126,17 @@ const Dashboard = () => {
               <Link to="#" onClick={(e) => { setProcessInstanceId($$.instanceId); toggleModalWatchProcess(); }}>
                 <i className="mdi mdi-eye mdi-24px"></i>
               </Link>
-            
-              {
-                credentials.isAnalysisSupervisor?null:
-                <TaskStatus taskStatus={$$.status}
-                  pathname={$$.pathname}
-                  data={$$.data}
-                />
-              }
-              
+              <TaskStatus taskStatus={$$.status}
+                    pathname={$$.pathname}
+                    data={$$.data}
+                  />
+              {/* {
+                credentials.isAnalysisSupervisor ? null :
+                  <TaskStatus taskStatus={$$.status}
+                    pathname={$$.pathname}
+                    data={$$.data}
+                  />
+              } */}
             </>
           )
           return $$;
