@@ -1742,6 +1742,7 @@ export default class Services extends ApiService {
     "sow":"20"
 }
       */
+data["t24"] = false;
       var result = await this.post(url.URL_BACKEND_IGR_RECIPROCIDAD, data);
       return result;//WatchlistModel.fromJson(result);
     }
@@ -1775,6 +1776,7 @@ export default class Services extends ApiService {
 }
       */
       data["status"] = true;
+      data["t24"] = false;
 
       var result = await this.put(url.URL_BACKEND_IGR_RECIPROCIDAD, data);
       return result;//WatchlistModel.fromJson(result);
