@@ -1,0 +1,22 @@
+{
+  "Client Name": "Nombre del Cliente",
+  "Proposal Type": "Tipo de Propuesta",
+  "Application Status": "Estatus de Solicitud",
+  "Bank": "Banca",
+  "SLA": "SLA",
+  "Order": "Orden",
+  "Date": "Fecha",
+  "Analyst": "Analista",
+  "Status": "Estatus",
+  "Pre Approved": "Pre Aprobado",
+  "Client": "Cliente",
+  "Assignment": "Asignación",
+  "Analyst Name": "Nombre del Analista",
+  "Task Count": "Cantidad de Procesos",
+  "Conclusions":"Conclusiones",
+  "Term Disbursement Type":"Tipos de Plazos de Desembolso",
+  "Type":"Tipo",
+  "AskOpinion":"Pedir Opinion",
+  "Selectcompanyactivity":"Seleccionar actividad de la empresa",
+  "Selectacountry":"Seleccione un país"
+}

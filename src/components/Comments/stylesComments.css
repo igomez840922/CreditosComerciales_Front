@@ -1,0 +1,13 @@
+.avatar {
+   width: 60px;
+   height: 60px;
+   border-radius: 50%;
+}
+
+hr.dashed {
+    border-top: 2px dashed #999;
+}
+
+hr.dotted {
+    border-top: 2px dotted #999;
+}

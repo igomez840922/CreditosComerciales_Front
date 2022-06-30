@@ -1,0 +1,61 @@
+{
+  "Capex": {
+    "Title": "Capex",
+    "Usage": "Usos (en miles de $)",
+    "Sources": "Fuentes (en miles de $)",
+    "Budget": "Presupuesto",
+    "Shareholders": "Accionistas",
+    "Bank": "Banco",
+    "ProjectDetails": "Detalles del Proyecto"
+  },
+  "Workload": {
+    "Title": "Carga de trabajo",
+    "Subtitle": "Contratistas"
+  },
+  "ExchangeRisk": {
+    "Title": "Posición en Moneda Extranjera / Riesgo Cambiario"
+  },
+  "Projections": {
+    "Title": "Flujo Proyectado / Proyecciones"
+  },
+  "Background": {
+    "Title": "Antecedentes",
+    "Period": "Período Año"
+  },
+  "FacilityDetails": {
+    "Title": "Detalles de Facilidad",
+    "Debtor": "Deudor",
+    "Facility": "Facilidad",
+    "Loan": "Préstamo",
+    "Status": "Estatus",
+    "Classification": "Clasificación",
+    "Amount": "Monto Original",
+    "Balance": "Saldo Actual",
+    "Share": "Cuota",
+    "Capital": "Capital",
+    "Interests": "Intereses",
+    "Charges": "Otros Cargos",
+    "CurrentCreditFacility": "Vcto Facilidad de Crédito Actual",
+    "Refi1": "Refi1",
+    "Refi2": "Refi2",
+    "CurrentStatus": "Estado Actual",
+    "Comments": "Comentario"
+  },
+  "RestructuringDetails": {
+    "Title": "Detalles de Reestructuración"
+  },
+  "Guarantees": {
+    "Title": "Detalles de Garantías"
+  },
+  "Total": "Total",
+  "Description": "Descripción",
+  "Amount": "Monto",
+  "Value": "Valor",
+  "Date": "Fecha",
+  "CreditRiskOpinion": "Opinión Riesgo de Crédito",
+  "Recommendations": "Conclusiones y Recomendaciones",
+  "Strengths": "Fortalezas",
+  "Weakness": "Debilidades",
+  "Conclusions":"Conclusiones",
+  "AskOpinion":"Pedir Opinión"
+}

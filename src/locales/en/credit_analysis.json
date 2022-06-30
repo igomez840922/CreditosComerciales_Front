@@ -1,0 +1,23 @@
+{
+  "Client Name": "Customer Name",
+  "Proposal Type": "Proposal Type",
+  "Application Status": "Application Status",
+  "Bank":"Bank",
+  "SLA": "SLA",
+  "Order": "Order",
+  "Date": "Date",
+  "Analyst": "Analyst",
+  "Status": "Status",
+  "Pre Approved": "Pre Approved",
+  "Client": "Client",
+  "Assignment": "Assignment",
+  "Analyst Name": "Analyst Name",
+  "Task Count": "Task Count",
+  "Conclusions":"Conclusions",
+  "Term Disbursement Type":"Term Disbursement Type",
+  "Type":"Type",
+  "AskOpinion":"Ask Opinion",
+  "Selectcompanyactivity":"Select company activity",
+  "Selectacountry":"Select a country"
+
+}

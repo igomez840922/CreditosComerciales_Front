@@ -1,0 +1,61 @@
+{
+  "Capex": {
+    "Title": "Capex",
+    "Usage": "Usage (thousands $)",
+    "Sources": "Sources (thousands $)",
+    "Budget": "Budget",
+    "Shareholders": "Shareholders",
+    "Bank": "Bank",
+    "ProjectDetails": "Project Details"
+  },
+  "Workload": {
+    "Title": "Workload",
+    "Subtitle": "Contractors"
+  },
+  "ExchangeRisk": {
+    "Title": "Position in Foreign Currency / Currency Risk"
+  },
+  "Projections": {
+    "Title": "Projected Flow / Projections"
+  },
+  "Background": {
+    "Title": "Background",
+    "Period": "Period Year"
+  },
+  "FacilityDetails": {
+    "Title": "Facility Details",
+    "Debtor": "Debtor",
+    "Facility": "Facility",
+    "Loan": "Loan",
+    "Status": "Status",
+    "Classification": "Classification",
+    "Amount": "Original Amount",
+    "Balance": "Current Balance",
+    "Share": "Share",
+    "Capital": "Capital",
+    "Interests": "Interests",
+    "Charges": "Other Charges",
+    "CurrentCreditFacility": "Current Credit Facility",
+    "Refi1": "Refi1",
+    "Refi2": "Refi2",
+    "CurrentStatus": "Current Status",
+    "Comments": "Comment"
+  },
+  "RestructuringDetails": {
+    "Title": "Restructuring Details"
+  },
+  "Guarantees": {
+    "Title": "Guarantees Details"
+  },
+  "Total": "Total",
+  "Description": "Description",
+  "Amount": "Amount",
+  "Value": "Value",
+  "Date": "Date",
+  "CreditRiskOpinion": "Credit Risk Opinion",
+  "Recommendations": "Conclusions and Recommendations",
+  "Strengths": "Strengths",
+  "Weakness": "Weakness",
+  "Conclusions":"Conclusions",
+  "AskOpinion":"Ask Opinion"
+}
