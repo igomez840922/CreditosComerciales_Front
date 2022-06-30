@@ -166,6 +166,20 @@ export default class AutoSaveData {
       dataResult = dataResult.getBankingRelationCPDTOList;
       var dataResultLP = await backendServices.consultBankRelationsDebtsLP(transactionId);
       dataResultLP = dataResultLP.bankingRelationLPDTOList;
+      for (let i = 0; i < dataResult.length; i++) {
+        if (dataResult[i].t24 == true) {
+          if (dataResult[i].codigot24 == "" || dataResult[i].codigot24 == null) {
+            await backendServices.eliminateBankingRelationshipsDebtsCP({ transactId: transactionId, debtId: dataResult[i].debtId })
+          }
+        }
+      }
+      for (let i = 0; i < dataResultLP.length; i++) {
+        if (dataResultLP[i].t24 == true) {
+          if (dataResultLP[i].codigot24 == "" || dataResultLP[i].codigot24 == null) {
+            await backendServices.eliminateBankingRelationshipsDebtsLP({ transactId: transactionId, debtId: dataResultLP[i].debtId })
+          }
+        }
+      }
       var dataResultCore = await coreServices.getAllTermDebtsByTransaction(transactionId);
 
       console.log("fase0", dataResult);
@@ -236,7 +250,6 @@ export default class AutoSaveData {
           }
         } else {
           console.log("fase5", short);
-
           // si no existe un record en dataResult.getBankingRelationCPDTOList... siempre agregamos
           let dataSet = {
             "facilityType": short.facilityType,//NUEVO
